@@ -1,5 +1,10 @@
 package ch.heigvd.dai;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 
@@ -23,8 +28,23 @@ class Main implements Callable<Integer> {
     }
 
     public static void main(String... args) {
-        int exitCode = new CommandLine(new Main()).execute(args);
-
-        System.exit(exitCode);
+        BufferedReader br_f, bw_f;
+        try(BufferedReader br = new BufferedReader(new FileReader("./test.txt",
+                                                    StandardCharsets.UTF_8));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("./output_filename.txt",
+                                                    StandardCharsets.UTF_8))
+            ){
+            FileHandler.processText(br, bw, Main::charToUpperCase);
+        }catch(Exception e){
+            System.out.println("/!\\ Erreur --> " + e.getMessage());
+        }
     }
+    public static int charToUpperCase(int c){
+        if(c <= 'z' && c >= 'a') {
+            return Character.toUpperCase(c);
+        } else {
+            return c;
+        }
+    }
+
 }
