@@ -1,16 +1,33 @@
 package ch.heigvd.dai;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
 public class FileHandler {
-    public static void processText (BufferedReader br, BufferedWriter bw, Function < Integer, Integer > fn) throws IOException {
-        int c;
-        while ((c = br.read()) != -1) {
-            int modifiedChar = fn.apply(c);
-            bw.write(modifiedChar);
+
+    public static String readFile(String filePath) {
+        String content = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                content += (line + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("/!\\ Error with file reading : " + e.getMessage());
+            return null;
         }
+        return content;
     }
 
+    public static void writeFile(String filePath, String content) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            bw.write(content);
+        } catch (IOException e) {
+            System.out.println("/!\\ Error with file writing : " + e.getMessage());
+            return;
+        }
+    }
+    public static String modifyContent(String content, Function<String, String> function) {
+        return function.apply(content);
+    }
 }
