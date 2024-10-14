@@ -27,7 +27,4 @@ public class FileHandler {
             return;
         }
     }
-    public static String modifyContent(String content, Function<String, String> function) {
-        return function.apply(content);
-    }
 }
