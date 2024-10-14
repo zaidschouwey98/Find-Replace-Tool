@@ -19,17 +19,12 @@ public class TextHandler {
     public static int countOccurrences(String text, String word) {
         int count = 0;
 
-        if (text == null || word == null || word.isEmpty()) {
-            System.out.println("/!\\ Error : input text or word is null or empty !");
-            return -1;
-        }
-
         // Transform everything to lowercase char for an easier comparison
         String lowerCaseText = transform(text, "lowercase");
         String lowerCaseWord = transform(word, "lowercase");
 
         // The text is split every blank space (\b)
-        String[] splitText = lowerCaseText.split("\\b");
+        String[] splitText = lowerCaseText.split("[\\s\\p{Punct}]+");
 
         for (String w : splitText) {
             if (w.equals(lowerCaseWord)) {
@@ -40,4 +35,17 @@ public class TextHandler {
         return count;
     }
 
+    public static int countWords(String text) {
+        int count = 0;
+
+        String[] splitText = text.split("[\\s\\p{Punct}]+");
+
+        for (String w : splitText) {
+            if (w.matches("[a-zA-Zà-ÿÀ-Ÿ]+([-'][a-zA-Zà-ÿÀ-Ÿ]+)*")) {
+                count++;
+            }
+        }
+
+        return count;
+    }
 }

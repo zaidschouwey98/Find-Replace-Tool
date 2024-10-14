@@ -1,7 +1,6 @@
 package ch.heigvd.dai;
 import java.util.Objects;
 import java.util.concurrent.Callable;
-
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -51,10 +50,12 @@ class Main implements Callable<Integer> {
             return 1;
         }
 
-        if(content!=null){
-            if (Objects.equals(mode, "find")){
+        if(content!=null) {
+            if (Objects.equals(mode, "find")) {
                 System.out.println("The word \"" + find_word + "\" appears " +
                         TextHandler.countOccurrences(content, find_word) + " times in the text !");
+            } else if (Objects.equals(mode, "count")) {
+                System.out.println("There's " + TextHandler.countWords(content) + " words in the text !");
             } else {
                 // Apply function to modify text
                 content = TextHandler.transform(content, mode);
