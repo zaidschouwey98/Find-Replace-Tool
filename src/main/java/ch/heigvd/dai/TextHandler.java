@@ -1,5 +1,7 @@
 package ch.heigvd.dai;
 
+import java.security.KeyPair;
+import java.util.Arrays;
 import java.util.function.Function;
 
 public class TextHandler {
@@ -47,5 +49,34 @@ public class TextHandler {
         }
 
         return count;
+    }
+
+    public static String[] splitText(String text, int nbToSplit){
+        int arraySize = 8;
+        int splittedTextIndex = 0;
+
+        String[] splittedText = new String[arraySize];
+        String[] lines = text.split("\n");
+        String currentLine = "";
+
+
+        for(int i = 0; i < lines.length; i++){
+            currentLine += lines[i];
+            if((i + 1) % nbToSplit == 0){
+                if(splittedTextIndex == arraySize-1){
+                    // Double the size
+                    String[] tempArray = Arrays.copyOf(splittedText, arraySize*=2);
+                    splittedText = tempArray;
+                }
+                splittedText[splittedTextIndex++] = currentLine;
+                currentLine = "";
+            }
+        }
+        if(!currentLine.isEmpty())
+            splittedText[splittedTextIndex] = currentLine;
+
+        // Resize the array to fit content
+        String[] returnedSplittedText  = Arrays.copyOf(splittedText, splittedTextIndex);
+        return returnedSplittedText;
     }
 }

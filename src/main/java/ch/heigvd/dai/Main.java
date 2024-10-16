@@ -1,6 +1,8 @@
 package ch.heigvd.dai;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+
+import org.w3c.dom.Text;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -32,8 +34,14 @@ class Main implements Callable<Integer> {
     ) private String find_word = "";
 
     @CommandLine.Option(
+            names = {"-lts", "--linestosplit"},
+            description = "The word to find",
+            defaultValue = "2"
+    ) private String linesToSplit = "";
+
+    @CommandLine.Option(
             names = {"-m", "--mode"},
-            description = "The function to apply : uppercase, lowercase, reverse",
+            description = "The function to apply : uppercase, lowercase, reverse, split",
             defaultValue = "uppercase"
     ) private String mode;
 
@@ -51,18 +59,30 @@ class Main implements Callable<Integer> {
         }
 
         if(content!=null) {
-            if (Objects.equals(mode, "find")) {
-                System.out.println("The word \"" + find_word + "\" appears " +
-                        TextHandler.countOccurrences(content, find_word) + " times in the text !");
-            } else if (Objects.equals(mode, "count")) {
-                System.out.println("There's " + TextHandler.countWords(content) + " words in the text !");
-            } else {
-                // Apply function to modify text
-                content = TextHandler.transform(content, mode);
-                // Write in output file
-                FileHandler.writeFile(output_filePath, content);
-            }
+            switch(mode){
+                case "find":
+                    System.out.println("The word \"" + find_word + "\" appears " +
+                            TextHandler.countOccurrences(content, find_word) + " times in the text !");
+                    break;
+                case "count":
+                    System.out.println("There's " + TextHandler.countWords(content) + " words in the text !");
 
+                    break;
+                case "split":
+                    String[] texts = TextHandler.splitText(content, Integer.parseInt(linesToSplit));
+                    for(int i = 0; i < texts.length; i++) {
+                        FileHandler.writeFile("split_" +(i+1) +"_"+ output_filePath, texts[i]);
+                    }
+
+                    break;
+                default:
+                    // Apply function to modify text
+                    content = TextHandler.transform(content, mode);
+                    // Write in output file
+                    FileHandler.writeFile(output_filePath, content);
+                    break;
+
+            }
             System.out.println("Job's done !");
             return 0;
         } else {
