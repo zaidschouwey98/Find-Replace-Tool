@@ -1,12 +1,11 @@
 package ch.heigvd.dai;
+import java.util.Objects;
 import java.util.concurrent.Callable;
-import java.util.function.Function;
-
 import picocli.CommandLine;
 
 @CommandLine.Command(
-        name = "transform",
-        description = "Modifies text",
+        name = "Find-Replace-Tool",
+        description = "Executes different action on an input text.",
         version = "1.0.0",
         mixinStandardHelpOptions = true)
 
@@ -19,7 +18,7 @@ class Main implements Callable<Integer> {
 
     @CommandLine.Option(
             names = {"-t", "--text"},
-            description = "The input text entered in the terminal"
+            description = "The input text to read"
     ) private String input_terminalText = "";
 
     @CommandLine.Option(
@@ -28,19 +27,15 @@ class Main implements Callable<Integer> {
     ) private String output_filePath = "";
 
     @CommandLine.Option(
+            names = {"-w", "--word"},
+            description = "The word to find"
+    ) private String find_word = "";
+
+    @CommandLine.Option(
             names = {"-m", "--mode"},
             description = "The function to apply : uppercase, lowercase, reverse",
             defaultValue = "uppercase"
     ) private String mode;
-
-    private Function<String, String> getFunction() {
-        return switch (mode) {
-            case "lowercase" -> String::toLowerCase;
-            case "reverse" -> s -> new StringBuilder(s).reverse().toString();
-            default -> String::toUpperCase;
-        };
-    }
-
 
     public Integer call() {
         String content;
@@ -56,11 +51,17 @@ class Main implements Callable<Integer> {
         }
 
         if(content!=null) {
-            // Apply function to modify text
-            String modifiedContent = FileHandler.modifyContent(content, getFunction());
-
-            // Write in output file
-            FileHandler.writeFile(output_filePath, modifiedContent);
+            if (Objects.equals(mode, "find")) {
+                System.out.println("The word \"" + find_word + "\" appears " +
+                        TextHandler.countOccurrences(content, find_word) + " times in the text !");
+            } else if (Objects.equals(mode, "count")) {
+                System.out.println("There's " + TextHandler.countWords(content) + " words in the text !");
+            } else {
+                // Apply function to modify text
+                content = TextHandler.transform(content, mode);
+                // Write in output file
+                FileHandler.writeFile(output_filePath, content);
+            }
 
             System.out.println("Job's done !");
             return 0;
@@ -70,17 +71,16 @@ class Main implements Callable<Integer> {
         }
     }
 
-    // Méthode main pour lancer le programme
     public static void main(String[] args) {
         Long start = System.nanoTime();
 
-        // Créer une instance de Main et exécuter Picocli
+        // create instance of main and execute Picocli
         int exitCode = new CommandLine(new Main()).execute(args);
 
         Long end = System.nanoTime();
 
         if (exitCode == 0) {
-            System.out.println("Exection time in ms: " + (end - start) / (1000 * 1000));
+            System.out.println("Execution time in ms: " + (end - start) / (1000 * 1000));
         }
 
         System.exit(exitCode);

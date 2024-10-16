@@ -1,7 +1,6 @@
 package ch.heigvd.dai;
 
 import java.io.*;
-import java.util.function.Function;
 
 public class FileHandler {
 
@@ -14,7 +13,7 @@ public class FileHandler {
             }
         } catch (IOException e) {
             System.out.println("/!\\ Error with file reading : " + e.getMessage());
-            return null;
+            System.exit(1);
         }
         return content;
     }
@@ -24,10 +23,7 @@ public class FileHandler {
             bw.write(content);
         } catch (IOException e) {
             System.out.println("/!\\ Error with file writing : " + e.getMessage());
-            return;
+            System.exit(1);
         }
-    }
-    public static String modifyContent(String content, Function<String, String> function) {
-        return function.apply(content);
     }
 }
