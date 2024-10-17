@@ -42,13 +42,11 @@ public class TextHandler {
 
         StringBuilder result = new StringBuilder();
 
-        // Remplacer chaque occurrence du mot par le remplacement
         while (matcher.find()) {
-            matcher.appendReplacement(result, replacement);
+            matcher.appendReplacement(result, replacement); // replace the words
         }
-        matcher.appendTail(result);  // Ajouter le reste du texte non modifié
+        matcher.appendTail(result);  // Add the remaining of the text
 
-        // Retourner le texte modifié
         return result.toString();
     }
 
@@ -62,12 +60,12 @@ public class TextHandler {
                 count++;
             }
         }
-
         return count;
     }
 
     public static int countChar(String text){
         int count = 0;
+
         for (char c : text.toCharArray()) {
            if (c != ' ' && c != '\n' && c != '\r') {
                count++;
@@ -101,7 +99,6 @@ public class TextHandler {
             splittedText[splittedTextIndex] = currentLine;
             splittedTextIndex++;
         }
-
 
         // Resize the array to fit content
         String[] returnedSplittedText  = Arrays.copyOf(splittedText, splittedTextIndex);

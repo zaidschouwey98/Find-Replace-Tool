@@ -1,6 +1,3 @@
-pomme
-pomme
-pomme
-pomme
-pomme
-pomme
+Si Johnny achète 5 pommes, 10 bananes et 3 poire,
+et qu'il donne 2 pommes et 1 banane à Eric,
+combien de pommes reste-il à Johny.
