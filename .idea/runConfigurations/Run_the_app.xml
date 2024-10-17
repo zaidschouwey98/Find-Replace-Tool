@@ -2,7 +2,7 @@
   <configuration default="false" name="Run the app" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="ch.heigvd.dai.Main" />
     <module name="Find-Replace-Tool" />
-    <option name="PROGRAM_PARAMETERS" value="-f test.txt -m split -o output.txt -lts 4" />
+    <option name="PROGRAM_PARAMETERS" value="-f input.txt -m split -o output.txt -lts 4" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

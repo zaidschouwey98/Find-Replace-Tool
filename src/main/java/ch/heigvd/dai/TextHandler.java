@@ -86,7 +86,7 @@ public class TextHandler {
 
 
         for(int i = 0; i < lines.length; i++){
-            currentLine += lines[i];
+            currentLine += lines[i] +'\n';
             if((i + 1) % nbToSplit == 0){
                 if(splittedTextIndex == arraySize-1){
                     // Double the size
@@ -97,8 +97,11 @@ public class TextHandler {
                 currentLine = "";
             }
         }
-        if(!currentLine.isEmpty())
+        if(!currentLine.isEmpty()){
             splittedText[splittedTextIndex] = currentLine;
+            splittedTextIndex++;
+        }
+
 
         // Resize the array to fit content
         String[] returnedSplittedText  = Arrays.copyOf(splittedText, splittedTextIndex);
