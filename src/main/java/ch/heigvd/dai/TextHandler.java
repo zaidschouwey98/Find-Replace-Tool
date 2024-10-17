@@ -6,7 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextHandler {
-    public static Function<String, String> getFunction(String mode) {
+    //Only accessible to this class
+    Function<String, String> getFunction(String mode) {
         return switch (mode) {
             case "lowercase" -> String::toLowerCase;
             case "reverse" -> s -> new StringBuilder(s).reverse().toString();
@@ -15,7 +16,8 @@ public class TextHandler {
     }
 
     public static String transform(String content, String mode) {
-        Function<String, String> function = getFunction(mode);
+        TextHandler textHandler = new TextHandler();
+        Function<String, String> function = textHandler.getFunction(mode);
         return function.apply(content);
     }
 
@@ -75,13 +77,16 @@ public class TextHandler {
     }
 
     public static String[] splitText(String text, int nbToSplit){
+        if(nbToSplit <= 0){
+            System.err.println("The number used can't be <= 0 !");
+            System.exit(1);
+        }
         int arraySize = 8;
         int splittedTextIndex = 0;
 
         String[] splittedText = new String[arraySize];
         String[] lines = text.split("\n");
         String currentLine = "";
-
 
         for(int i = 0; i < lines.length; i++){
             currentLine += lines[i] +'\n';
@@ -95,6 +100,7 @@ public class TextHandler {
                 currentLine = "";
             }
         }
+
         if(!currentLine.isEmpty()){
             splittedText[splittedTextIndex] = currentLine;
             splittedTextIndex++;
