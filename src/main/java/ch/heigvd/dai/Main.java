@@ -40,7 +40,7 @@ class Main implements Callable<Integer> {
 
     @CommandLine.Option(
             names = {"-lts", "--linestosplit"},
-            description = "The word to find",
+            description = "The number of lines before new file",
             defaultValue = "2"
     ) private String linesToSplit = "";
 
