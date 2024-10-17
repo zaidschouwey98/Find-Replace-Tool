@@ -15,7 +15,8 @@ class Main implements Callable<Integer> {
 
     @CommandLine.Option(
             names = {"-f", "--file"},
-            description = "The path of the file to read"
+            description = "The path of the file to read",
+            required = true
     ) private String input_filePath = "";
 
     @CommandLine.Option(
@@ -62,6 +63,8 @@ class Main implements Callable<Integer> {
             System.out.println("Choose only one input : file (-f) or text (-t) !");
             return 1;
         }
+        if(output_filePath.isEmpty())
+            output_filePath = "output_" + input_filePath;
 
         if(content!=null) {
             switch(mode){
