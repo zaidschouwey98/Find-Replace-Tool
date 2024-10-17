@@ -34,6 +34,11 @@ class Main implements Callable<Integer> {
     ) private String find_word = "";
 
     @CommandLine.Option(
+            names = {"-r", "--replacement"},
+            description = "The word to replace the other one (case sensitive)"
+    ) private String replacement = "";
+
+    @CommandLine.Option(
             names = {"-lts", "--linestosplit"},
             description = "The word to find",
             defaultValue = "2"
@@ -64,16 +69,21 @@ class Main implements Callable<Integer> {
                     System.out.println("The word \"" + find_word + "\" appears " +
                             TextHandler.countOccurrences(content, find_word) + " times in the text !");
                     break;
-                case "count":
+                case "countWords":
                     System.out.println("There's " + TextHandler.countWords(content) + " words in the text !");
-
+                    break;
+                case "countChar":
+                    System.out.println("There's " + TextHandler.countChar(content) + " characters in the text !");
                     break;
                 case "split":
                     String[] texts = TextHandler.splitText(content, Integer.parseInt(linesToSplit));
                     for(int i = 0; i < texts.length; i++) {
                         FileHandler.writeFile("split_" +(i+1) +"_"+ output_filePath, texts[i]);
                     }
-
+                    break;
+                case "replace":
+                    content = TextHandler.replaceWord(content, find_word, replacement);
+                    FileHandler.writeFile(output_filePath, content);
                     break;
                 default:
                     // Apply function to modify text
@@ -81,7 +91,6 @@ class Main implements Callable<Integer> {
                     // Write in output file
                     FileHandler.writeFile(output_filePath, content);
                     break;
-
             }
             System.out.println("Job's done !");
             return 0;

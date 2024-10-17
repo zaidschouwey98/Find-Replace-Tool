@@ -1,8 +1,9 @@
 package ch.heigvd.dai;
 
-import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TextHandler {
     public static Function<String, String> getFunction(String mode) {
@@ -21,23 +22,37 @@ public class TextHandler {
     public static int countOccurrences(String text, String word) {
         int count = 0;
 
-        // Transform everything to lowercase char for an easier comparison
+        // all to lowercase for better comparison
         String lowerCaseText = transform(text, "lowercase");
         String lowerCaseWord = transform(word, "lowercase");
 
-        // The text is split every blank space (\b)
-        String[] splitText = lowerCaseText.split("[\\s\\p{Punct}]+");
+        Pattern pattern = Pattern.compile("\\b" + Pattern.quote(lowerCaseWord) + "\\b");
+        Matcher matcher = pattern.matcher(lowerCaseText);
 
-        for (String w : splitText) {
-            if (w.equals(lowerCaseWord)) {
-                count++;
-            }
+        while (matcher.find()) {
+            count++;
         }
 
         return count;
     }
 
-    public static int countWords(String text) {
+    public static String replaceWord(String text, String word, String replacement) {
+        Pattern pattern = Pattern.compile("\\b" + Pattern.quote(word) + "\\b");
+        Matcher matcher = pattern.matcher(text);
+
+        StringBuilder result = new StringBuilder();
+
+        // Remplacer chaque occurrence du mot par le remplacement
+        while (matcher.find()) {
+            matcher.appendReplacement(result, replacement);
+        }
+        matcher.appendTail(result);  // Ajouter le reste du texte non modifié
+
+        // Retourner le texte modifié
+        return result.toString();
+    }
+
+    public static int countWords(String text){
         int count = 0;
 
         String[] splitText = text.split("[\\s\\p{Punct}]+");
@@ -48,6 +63,16 @@ public class TextHandler {
             }
         }
 
+        return count;
+    }
+
+    public static int countChar(String text){
+        int count = 0;
+        for (char c : text.toCharArray()) {
+           if (c != ' ' && c != '\n' && c != '\r') {
+               count++;
+           }
+        }
         return count;
     }
 
