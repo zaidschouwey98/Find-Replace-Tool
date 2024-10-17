@@ -97,8 +97,11 @@ public class TextHandler {
                 currentLine = "";
             }
         }
-        if(!currentLine.isEmpty())
+        if(!currentLine.isEmpty()){
             splittedText[splittedTextIndex] = currentLine;
+            splittedTextIndex++;
+        }
+
 
         // Resize the array to fit content
         String[] returnedSplittedText  = Arrays.copyOf(splittedText, splittedTextIndex);
